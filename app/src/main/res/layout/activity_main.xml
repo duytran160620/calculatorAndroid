@@ -204,7 +204,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
         <Button
-                android:id="@+id/buttonComma"
+                android:id="@+id/buttonDot"
                 android:text="."
                 android:textColor="#FAFAF8"
                 android:backgroundTint="#3A3733"

@@ -1,12 +1,13 @@
 package com.example.hellowolrd;
 
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.util.Objects;
 
 import static java.lang.Double.*;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     // Others Button
     Button deleteAll;
     Button delete;
+    Button dot;
 
     Operator o;
     String numberOnScreen = "";
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setupButtonEqualClick();
         setupButtonClear();
         setupButtonClearAll();
+        setupButtonDotClick();
     }
     void setupButtonNumbersClick() {
         button0 =  findViewById(R.id.button0);
@@ -156,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!numberOnScreen.equals("")) {
+                    numberOnScreen = numberOnScreen.replace(",", ".");
                     firstNumber = parseDouble(numberOnScreen);
                     textViewResult.setText("");
                     numberOnScreen = "";
@@ -171,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!numberOnScreen.equals("")) {
+                    numberOnScreen = numberOnScreen.replace(",", ".");
                     firstNumber = parseDouble(numberOnScreen);
                     textViewResult.setText("");
                     numberOnScreen = "";
@@ -186,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!numberOnScreen.equals("")) {
+                    numberOnScreen = numberOnScreen.replace(",", ".");
                     firstNumber = parseDouble(numberOnScreen);
                     textViewResult.setText("");
                     numberOnScreen = "";
@@ -201,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!numberOnScreen.equals("")) {
+                    numberOnScreen = numberOnScreen.replace(",", ".");
                     firstNumber = parseDouble(numberOnScreen);
                     textViewResult.setText("");
                     numberOnScreen = "";
@@ -218,23 +225,37 @@ public class MainActivity extends AppCompatActivity {
                 secondNumber = parseDouble(textViewResult.getText().toString());
                 if(o == Operator.add) {
                     double kq = firstNumber + secondNumber;
-                    numberOnScreen = String.valueOf(kq);
-                    textViewResult.setText(String.valueOf(kq));
+                    numberOnScreen = String.format("%.2f", kq);
+                    textViewResult.setText(numberOnScreen);
                 } else if(o == Operator.minus) {
                     double kq = firstNumber - secondNumber;
-                    numberOnScreen = String.valueOf(kq);
-                    textViewResult.setText(String.valueOf(kq));
+                    numberOnScreen = String.format("%.2f", kq);
+                    textViewResult.setText(numberOnScreen);
                 } else if(o == Operator.multiply) {
                     double kq = firstNumber * secondNumber;
-                    numberOnScreen = String.valueOf(kq);
-                    textViewResult.setText(String.valueOf(kq));
+                    numberOnScreen = String.format("%.2f", kq);
+                    textViewResult.setText(numberOnScreen);
                 } else if(o == Operator.divide) {
                     if (secondNumber != 0) {
                         double kq = firstNumber / secondNumber;
-                        numberOnScreen = String.valueOf(kq);
-                        textViewResult.setText(String.valueOf(kq));
+                        numberOnScreen = String.format("%.2f", kq);
+                        textViewResult.setText(numberOnScreen);
                     } else {
-                        textViewResult.setText("Error: Can't divide by zero");
+                        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                        alertDialog.setTitle("Alert");
+                        alertDialog.setMessage("Error: Can't divide by zero");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                        firstNumber = 0;
+                        secondNumber = 0;
+                        numberOnScreen = "";
+                        textViewResult.setText("");
+                        o = Operator.none;
                     }
                 }
             }
@@ -264,6 +285,17 @@ public class MainActivity extends AppCompatActivity {
                 textViewResult.setText(getNumberOnScreen.substring(0, getNumberOnScreen.length() - 1));
                 numberOnScreen = textViewResult.getText().toString();
                 System.out.println(numberOnScreen);
+            }
+        });
+    }
+
+    void setupButtonDotClick() {
+        dot = findViewById(R.id.buttonDot);
+        dot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numberOnScreen = numberOnScreen + dot.getText().toString();
+                textViewResult.setText(numberOnScreen);
             }
         });
     }
